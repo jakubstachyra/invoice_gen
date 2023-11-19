@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "976150402435",
+    "project_id": "invoicegeneratordatabase-fdd48",
+    "storage_bucket": "invoicegeneratordatabase-fdd48.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976150402435:android:db9f7e224a9d80b96512b6",
+        "android_client_info": {
+          "package_name": "com.example.invoice_gen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuPd9F6hroavK5p_XPmwWNaDpTH9C4Eao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
