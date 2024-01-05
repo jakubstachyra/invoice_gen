@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:invoice_gen/blocs/invoice_menagment/invoice_menagment_bloc.dart';
 import 'package:invoice_gen/screens/auth/welcome_screen.dart';
-import 'package:invoice_gen/screens/main_screen.dart';
+import 'package:invoice_gen/screens/menu/main_screen.dart';
 import 'blocs/sign_in_bloc/sign_in_bloc.dart';
 
 class MyAppView extends StatelessWidget {
@@ -11,28 +12,25 @@ class MyAppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Firebase Auth',
+        title: 'InvoiceGen',
         theme: ThemeData(
-          colorScheme: const ColorScheme.light(
-              background: Colors.white,
-              onBackground: Colors.black,
-              primary: Color.fromRGBO(206, 147, 216, 1),
-              onPrimary: Colors.black,
-              secondary: Color.fromRGBO(244, 143, 177, 1),
-              onSecondary: Colors.white,
-              tertiary: Color.fromRGBO(255, 204, 128, 1),
-              error: Colors.red,
-              outline: Color(0xFF424242)),
+          colorScheme: const ColorScheme.light(background: Colors.white),
         ),
         home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (context, state) {
           if (state.status == AuthenticationStatus.authenticated) {
             return BlocProvider(
-              create: (context) => SignInBloc(
-                  userRepository:
-                      context.read<AuthenticationBloc>().userRepository),
-              child: const MainScreen(),
-            );
+                create: (context) => SignInBloc(
+                    userRepository:
+                        context.read<AuthenticationBloc>().userRepository),
+                child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                        create: (context) =>
+                            InvoiceMenagmentBloc()..add(LoadInvoices()))
+                  ],
+                  child: const MainScreen(),
+                ));
           } else {
             return const WelcomeScreen();
           }

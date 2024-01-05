@@ -54,6 +54,10 @@ class Address {
 class Item {
   final double _price;
   final String _name;
-  final int _vat;
-  Item(this._price, this._name, this._vat);
+  final int _tax;
+  Item(this._price, this._name, this._tax);
+
+  String get name {
+    return _name;
+  }
 }
