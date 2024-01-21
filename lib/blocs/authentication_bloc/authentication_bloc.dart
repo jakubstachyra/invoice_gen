@@ -11,6 +11,7 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final UserRepository userRepository;
+  late User? user;
   late final StreamSubscription<User?> _userSubscription;
 
   AuthenticationBloc({required this.userRepository})
@@ -20,6 +21,8 @@ class AuthenticationBloc
     });
     on<AuthenticationUserChanged>((event, emit) {
       if (event.user != null) {
+        user = event.user;
+        user?.getIdToken();
         emit(AuthenticationState.authenticated(event.user!));
       } else {
         emit(const AuthenticationState.unauthenticated());

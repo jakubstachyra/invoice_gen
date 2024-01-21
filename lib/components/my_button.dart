@@ -1,20 +1,34 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-// class MyButton extends StatelessWidget {
-//   MyButton({super.key});
+class MyButton extends StatelessWidget {
+  final String text;
+  final VoidCallback callback;
+  
+  const MyButton({super.key,
+   required this.text,
+   required this.callback,});
 
-//   @override
-//   Widget build(BuildContext contex) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 50),
-//       child: ElevatedButton(
-//         style: ElevatedButton.styleFrom(
-//           minimumSize: const Size(double.infinity,
-//               50), // double.infinity is the width and 50 is the height
-//         ),
-//         onPressed: () {},
-//         child: const Text('Log in'),
-//       ),
-//     );
-//   }
-// }
+@override
+Widget build(BuildContext context) {
+  return TextButton(
+      onPressed: callback, 
+    style: TextButton.styleFrom(
+        elevation: 3.0,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(60))),
+    child:  Padding(
+      padding:
+          const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w600),
+      ),
+    ));
+  }
+}

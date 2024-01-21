@@ -1,87 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:invoice_gen/classes/supplemetary.dart';
-import 'package:invoice_gen/components/my_textfield.dart';
-import 'package:invoice_gen/screens/invoice/details.dart';
-import 'package:invoice_gen/screens/invoice/items.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
+import 'package:invoice_gen/components/my_app_bar.dart';
+import 'package:invoice_gen/components/my_button.dart';
+import 'package:invoice_gen/components/my_form_button.dart';
+import 'package:invoice_gen/components/my_text.dart';
+import 'package:invoice_gen/screens/invoice/add_customer.dart';
 
 class CustomerScreen extends StatelessWidget {
-  CustomerScreen({super.key, required this.seller});
+  const CustomerScreen({super.key,
+  required this.nameController,
+  required this.tinController,
+  required this.addressController});
 
-  final nameController = TextEditingController();
-  final tinController = TextEditingController();
-  final addressController = TextEditingController();
-  final Company seller;
-  late Company customer;
+  final TextEditingController nameController;
+  final TextEditingController tinController;
+  final TextEditingController addressController;
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Customer"),
-          elevation: 0,
-          toolbarHeight: 100,
-          foregroundColor: Colors.blue[900],
-        ),
+        appBar: MyAppBar(text: const Text("New Invoice"),
+        callback:() {
+                BlocProvider.of<InvoiceBloc>(context).add(NavigateToSellerPageEvent());
+              }),
         body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                SizedBox(
-                    child: MyTextField(
-                        controller: nameController,
-                        hintText: "Name",
-                        obscureText: false,
-                        keyboardType: TextInputType.name)),
-                const SizedBox(height: 20),
-                SizedBox(
-                    child: MyTextField(
-                        controller: tinController,
-                        hintText: "Tin",
-                        obscureText: false,
-                        keyboardType: TextInputType.number)),
-                const SizedBox(height: 20),
-                SizedBox(
-                    child: MyTextField(
-                        controller: addressController,
-                        hintText: "Adress",
-                        obscureText: false,
-                        keyboardType: TextInputType.number)),
-                const SizedBox(height: 20),
-                TextButton(
-                    onPressed: () {
-                      customer = Company(
-                          nameController.toString(),
-                          addressController.toString(),
-                          tinController.toString());
+                const SizedBox(height: 40),
+
+                SizedBox(height: 65,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: const Text("Who are you billing to?",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,)),
+                
+                const SizedBox(height: 40),
+
+                SizedBox(height: 20,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: const MyTextGrey(text: "BILL TO")),
+                
+                const SizedBox(height: 5),
+
+                MyFormButton(text: " Add Client",
+                  icon: Icon(Icons.add_box, color: Colors.blue[900]),
+                  callback:()  {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                            builder: (BuildContext context) => ItemsScreen(
-                                  seller: seller,
-                                  customer: customer,
-                                )),
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                        elevation: 3.0,
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(60))),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                      child: Text(
-                        'Continue',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddCustomerScreen(),
                       ),
-                    ))
+                    );
+                }),
+
+                const SizedBox(height: 40),        
+                SizedBox(height: 20,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: const MyTextGrey(text: "RECENTLY USED")),
+                const SizedBox(height: 5),
+
+                 MyFormButton(text: "See all clients",
+                  icon: Icon(Icons.arrow_right,
+                   color: Colors.blue[900],),
+                  callback:() => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                          builder: (BuildContext context) => AddCustomerScreen())
+                )}),
+                
+                const SizedBox(height: 40,),
+          
+                MyButton(text: "Continue",
+                 callback: () {
+                      BlocProvider.of<InvoiceBloc>(context).add(UpdateCustomerEvent(
+                        name: nameController.text, 
+                        address: addressController.text, 
+                        tin: tinController.text,
+                        ));
+                      BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
+                    })
               ],
-            )));
+            )), );
   }
 }

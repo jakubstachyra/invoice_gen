@@ -21,10 +21,11 @@ class FirebaseUserRepo implements UserRepository {
   }
 
   @override
-  Future<void> signIn(String email, String password) async {
+  Future<UserCredential> signIn(String email, String password) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      UserCredential userCrednetial = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+          return userCrednetial;
     } catch (e) {
       log(e.toString());
       rethrow;

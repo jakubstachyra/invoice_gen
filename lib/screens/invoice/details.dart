@@ -1,110 +1,96 @@
 import 'package:flutter/material.dart';
-import 'package:invoice_gen/classes/supplemetary.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
+import 'package:invoice_gen/components/my_app_bar.dart';
+import 'package:invoice_gen/components/my_button.dart';
 import 'package:invoice_gen/components/my_textfield.dart';
 
-class DetailsScreen extends StatelessWidget {
-  DetailsScreen(
-      {super.key,
-      required this.seller,
-      required this.customer,
-      required this.items});
 
-  final placeController = TextEditingController();
-  final issuanceController = TextEditingController();
-  final dateOfSaleController = TextEditingController();
-  final dateOfPaymentController = TextEditingController();
-  final idController = TextEditingController();
-  final Company seller;
-  final Company customer;
-  final List<Item> items;
-  late Details details;
+class DetailsScreen extends StatelessWidget {
+  const DetailsScreen(
+      {super.key,
+       required this.placeController,
+       required this.issuanceController,
+       required this.dateOfSaleController,
+       required this.dateOfPaymentController,
+       required this.idController
+       });
+
+  final TextEditingController placeController;
+  final TextEditingController issuanceController;
+  final TextEditingController dateOfSaleController;
+  final TextEditingController dateOfPaymentController;
+  final TextEditingController idController;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Details"),
-          elevation: 0,
-          toolbarHeight: 100,
-          foregroundColor: Colors.blue[900],
-        ),
+        appBar: MyAppBar(text: const Text("New Invoice"),
+        callback: ()
+        {
+          BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
+        },),
         body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Column(
               children: [
+
+                SizedBox(height: 65,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: const Text("Final Step!",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,)),
+                
+                const SizedBox(height: 40),
+
+
                 SizedBox(
                     child: MyTextField(
                         controller: idController,
-                        hintText: "Id of Invoice",
+                        hintText: "Invoice number",
                         obscureText: false,
-                        keyboardType: TextInputType.name)),
+                        keyboardType: TextInputType.text)),
                 const SizedBox(height: 20),
                 SizedBox(
                     child: MyTextField(
                         controller: placeController,
                         hintText: "Place",
                         obscureText: false,
-                        keyboardType: TextInputType.name)),
+                        keyboardType: TextInputType.text)),
                 const SizedBox(height: 20),
                 SizedBox(
                     child: MyTextField(
                         controller: issuanceController,
                         hintText: "Issunace",
                         obscureText: false,
-                        keyboardType: TextInputType.number)),
+                        keyboardType: TextInputType.text)),
                 const SizedBox(height: 20),
                 SizedBox(
                     child: MyTextField(
                         controller: dateOfSaleController,
-                        hintText: "Date of Sale",
+                        hintText: "Invoice Date",
                         obscureText: false,
-                        keyboardType: TextInputType.datetime)),
+                        keyboardType: TextInputType.text)),
                 const SizedBox(height: 20),
                 SizedBox(
                     child: MyTextField(
                         controller: dateOfPaymentController,
-                        hintText: "Date of Payment",
+                        hintText: "Payent Due",
                         obscureText: false,
-                        keyboardType: TextInputType.datetime)),
+                        keyboardType: TextInputType.text)),
                 const SizedBox(height: 20),
-                TextButton(
-                    onPressed: () {
-                      details = Details(
-                          placeController.text,
-                          issuanceController.text,
-                          dateOfSaleController.text,
-                          dateOfPaymentController.text,
-                          idController.text);
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                            builder: (BuildContext context) => DetailsScreen(
-                                  seller: seller,
-                                  customer: customer,
-                                  items: items,
-                                )),
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                        elevation: 3.0,
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(60))),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                      child: Text(
-                        'Continue',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ))
+                MyButton(text: "Summary",
+                 callback: () {
+                      context.read<InvoiceBloc>().add(UpdateInvoiceDetailsEvent(
+                          invoiceID: idController.text,
+                          date: DateTime.parse(dateOfPaymentController.text),
+                          place: placeController.text,
+                          issuance: issuanceController.text,
+                          due: DateTime.parse(dateOfPaymentController.text)
+                        ));
+                      context.read<InvoiceBloc>().add(NavigateToSummaryPageEvent());
+                    }),
               ],
             )));
   }

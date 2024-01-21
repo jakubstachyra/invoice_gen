@@ -20,8 +20,8 @@ class Company {
 class Details {
   final String _place;
   final String _issuance;
-  final String _dateOfSale;
-  final String _dateOfPayment;
+  final DateTime _dateOfSale;
+  final DateTime _dateOfPayment;
   final String _id;
   Details(this._place, this._issuance, this._dateOfSale, this._dateOfPayment,
       this._id);
@@ -33,11 +33,11 @@ class Details {
     return _issuance;
   }
 
-  String get dateOfSale {
+  DateTime get dateOfSale {
     return _dateOfSale;
   }
 
-  String get dateOfPayment {
+  DateTime get dateOfPayment {
     return _dateOfPayment;
   }
 
@@ -55,9 +55,19 @@ class Item {
   final double _price;
   final String _name;
   final int _tax;
-  Item(this._price, this._name, this._tax);
+  final int _quantity;
+  Item(this._price, this._name, this._tax, this._quantity);
 
   String get name {
     return _name;
+  }
+  double get price {
+    return _price;
+  }
+  int get tax {
+    return _tax;
+  }
+  int get quantity{
+    return _quantity;
   }
 }

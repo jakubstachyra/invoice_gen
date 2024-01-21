@@ -1,7 +1,8 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
-import 'package:invoice_gen/classes/supplemetary.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
+import 'package:invoice_gen/components/my_app_bar.dart';
+import 'package:invoice_gen/components/my_button.dart';
 import 'package:invoice_gen/components/my_textfield.dart';
 
 class AddItemScreen extends StatelessWidget {
@@ -10,16 +11,16 @@ class AddItemScreen extends StatelessWidget {
   final nameController = TextEditingController();
   final priceController = TextEditingController();
   final taxController = TextEditingController();
+  final quantityController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Add item"),
-          elevation: 0,
-          toolbarHeight: 100,
-          foregroundColor: Colors.blue[900],
-        ),
+        appBar: MyAppBar(text: const Text("Add item"),
+        callback: (){
+          BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
+          Navigator.pop(context);
+        }),
         body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Column(
@@ -45,31 +46,24 @@ class AddItemScreen extends StatelessWidget {
                         obscureText: false,
                         keyboardType: TextInputType.number)),
                 const SizedBox(height: 20),
-                TextButton(
-                    onPressed: () {
-                      Item newitem = Item(double.parse(priceController.text),
-                          nameController.text, int.parse(taxController.text));
-                      Navigator.pop(context, newitem);
-                    },
-                    style: TextButton.styleFrom(
-                        elevation: 3.0,
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(60))),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                      child: Text(
-                        'Add item',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ))
-              ],
+                SizedBox(
+                    child: MyTextField(
+                        controller: quantityController,
+                        hintText: "Quantity",
+                        obscureText: false,
+                        keyboardType: TextInputType.number)),
+                MyButton(text: "Add Item", 
+                callback: ()
+                {
+                    context.read<InvoiceBloc>().add(AddProductEvent(
+                          name: nameController.text,
+                          price: double.parse(priceController.text),
+                          tax: int.parse(taxController.text),
+                          quantity: int.parse(quantityController.text)
+                        ));
+                    BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
+                    Navigator.pop(context);
+                })]
             )));
   }
 }

@@ -49,12 +49,11 @@ class _InvoiceScreenState extends State<InvoicesScreen>
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                 Text(
                   '${state.invoices.length}',
-                ),
-                const SizedBox(height: 20),
+                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.5,
+                  height: MediaQuery.of(context).size.height / 2,
                   width: MediaQuery.of(context).size.width,
                   child: Stack(
                     alignment: Alignment.center,
@@ -69,7 +68,7 @@ class _InvoiceScreenState extends State<InvoicesScreen>
                             child: SizedBox(
                               height: 150,
                               width: 200,
-                              child: state.invoices[index].image,
+                              child: Text(state.invoices[index].details.id),
                             ))
                     ],
                   ),
