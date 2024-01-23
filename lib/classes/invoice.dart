@@ -5,9 +5,8 @@ class Invoice {
   final Company _customer;
   final List<Item> _items;
   final Details _details;
-  //final Image image;
-
-  Invoice(this._seller, this._customer, this._items, this._details);
+  String id;
+  Invoice(this._seller, this._customer, this._items, this._details,this.id);
 
 
    Company get seller {

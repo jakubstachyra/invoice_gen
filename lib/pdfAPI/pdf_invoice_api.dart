@@ -8,7 +8,7 @@ import 'package:pdf/widgets.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
 
 class PdfInvoiceApi {
-  static Future<void> generate(Invoice invoice) async {
+  static Future<void> generate(Invoice invoice, String userID) async {
     final pdf = Document();
     final muktaRegular = await loadMuktaRegularFont();
 
@@ -24,8 +24,7 @@ class PdfInvoiceApi {
       footer: (context) => buildFooter(invoice),
     ));
 
-     PdfApi.saveDocument(name: '${invoice.details.id}.pdf', pdf: pdf);
-     //PdfApi.uploadFile(pdf.,)
+     //PdfApi.uploadFile(pdf, userID, invoice);
   }
 
   static Widget buildHeader(Invoice invoice, pw.Font font) => Column(

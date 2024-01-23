@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/screens/invoice/invoice_generation.dart';
-import 'package:invoice_gen/screens/menu/invoices_screen.dart';
+import 'package:invoice_gen/screens/menu/invoices.dart';
 import 'package:invoice_gen/screens/menu/reports_screen.dart';
 import 'package:invoice_gen/screens/menu/settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
-
+  
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
@@ -16,22 +15,23 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   final List<Widget> _screens = [
-    const InvoicesScreen(),
+    const CombinedInvoicesScreen(),
     const ReportsScreen(),
     const SettingsScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    // Blok umieszczony tutaj jest dostępny dla całego drzewa Scaffold.
-    return  Scaffold(
+
+    return Scaffold(
         appBar: AppBar(
-          title: const Text('Invoice Gen'),
-          toolbarHeight: 30,
+          title: Row(children: [ const Text('Invoice'), Text(' Gen', style: TextStyle(color: Theme.of(context).colorScheme.primary))]),
+          toolbarHeight: 20,
         ),
         body: _screens[_currentIndex],
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            LoadInvoiceEvent();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const InvoiceGenerationScreen()),

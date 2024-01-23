@@ -5,7 +5,6 @@ import 'package:invoice_gen/classes/supplemetary.dart';
 import 'package:invoice_gen/classes/utils.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
 import 'package:invoice_gen/components/my_button.dart';
-import 'package:invoice_gen/components/my_form_box.dart';
 import 'package:invoice_gen/components/my_text.dart';
 
 class SummaryScreen extends StatelessWidget {
@@ -52,14 +51,21 @@ class SummaryScreen extends StatelessWidget {
                   ]), 
               
               SizedBox(width: MediaQuery.of(context).size.width * 0.3),
-              Column(children: [
+              GestureDetector(
+                onTap: (){
+                  //  Navigator.push(
+                  //     context,
+                  //      MaterialPageRoute(builder: (context) => PdfPreviewScreen()),
+                  // );
+                },
+                child:Column(children: [
                 Image.asset('assets/images/logo.png',
                   width: MediaQuery.of(context).size.width * 0.3,
                   height: MediaQuery.of(context).size.width * 0.2),
                 Text("Tap for preview", style: TextStyle(fontSize: 12,
                  color: Colors.blue[900],
                 fontWeight: FontWeight.bold))
-              ],)
+              ],))
               ]),
 
               const SizedBox(height: 30,

@@ -27,6 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool containsNumber = false;
   bool containsSpecialChar = false;
   bool contains8Length = false;
+  String? _errorMsg;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             signUpRequired = true;
           });
         } else if (state is SignUpFailure) {
-          return;
+          _errorMsg = 'You already have an account';
+          return ;
         }
       },
       child: Form(
@@ -66,8 +68,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           .hasMatch(val)) {
                         return 'Please enter a valid email';
                       }
+                      
                       return null;
-                    }),
+                    },
+                    errorMsg: _errorMsg,),
               ),
               const SizedBox(height: 10),
               SizedBox(
@@ -127,6 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                       return null;
                     },
+                    errorMsg: _errorMsg,
                     suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {

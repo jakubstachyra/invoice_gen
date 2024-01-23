@@ -30,17 +30,24 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: SingleChildScrollView(
+      body: SafeArea(
+        child:  SingleChildScrollView(
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
-          child: Stack(
+          child:  
+          Stack(
             children: [
               BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
                 child: Container(),
               ),
+              SafeArea(child: Align(
+                  alignment: const Alignment(0,-0.7),
+                  child: Image.asset('assets/images/logo.png',
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.width * 0.6))),
               Align(
-                alignment: Alignment.bottomCenter,
+                alignment: const Alignment(0,1.3),
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height / 1.8,
                   child: Column(
@@ -103,7 +110,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               )
             ],
           ),
-        ),
+        )
+      ),
       ),
     );
   }

@@ -7,7 +7,6 @@ abstract class InvoiceState extends Equatable {
 
 class InvoiceInitial extends InvoiceState {}
 
-
 class InvoiceSellerUpdated extends InvoiceState {
   final Company seller;
   InvoiceSellerUpdated(this.seller);
@@ -29,6 +28,11 @@ class InvoiceDetailsUpdated extends InvoiceState {
 }
 
 class InvoiceCompleted extends InvoiceState {}
+
+class PdfPage extends InvoiceState {
+  final String filePath;
+  PdfPage(this.filePath);
+}
 
 class InvoiceFailure extends InvoiceState {
   final String message;

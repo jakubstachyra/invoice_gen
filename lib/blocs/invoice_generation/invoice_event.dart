@@ -21,6 +21,11 @@ class NavigateToDetailsPageEvent extends InvoiceEvent {}
 
 class NavigateToSummaryPageEvent extends InvoiceEvent {}
 
+class NavigateToPdfPageEvent extends InvoiceEvent {
+  final String filePath;
+  NavigateToPdfPageEvent(this.filePath);
+}
+
 class UpdateSellerEvent extends InvoiceEvent {
   final String name;
   final String address;
