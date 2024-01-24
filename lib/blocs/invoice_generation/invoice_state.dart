@@ -7,6 +7,10 @@ abstract class InvoiceState extends Equatable {
 
 class InvoiceInitial extends InvoiceState {}
 
+class InvoiceCompleted extends InvoiceState {}
+
+class InvoiceCancelled extends InvoiceState {}
+
 class InvoiceSellerUpdated extends InvoiceState {
   final Company seller;
   InvoiceSellerUpdated(this.seller);
@@ -27,8 +31,6 @@ class InvoiceDetailsUpdated extends InvoiceState {
   InvoiceDetailsUpdated(this.details);
 }
 
-class InvoiceCompleted extends InvoiceState {}
-
 class PdfPage extends InvoiceState {
   final String filePath;
   PdfPage(this.filePath);
@@ -39,6 +41,7 @@ class InvoiceFailure extends InvoiceState {
   InvoiceFailure({this.message = 'Error InvoiceGeneration'});
 }
 
+class EditInvoiceState extends InvoiceState{}
 
 class SellerPageState extends InvoiceState {
   final Company seller;

@@ -16,7 +16,6 @@ class MyAppView extends StatelessWidget {
       title: 'InvoiceGen',
       theme: ThemeData(
         colorScheme: const ColorScheme.light(background: Colors.white),
-        fontFamily: 'Mukta',
       ),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

@@ -26,12 +26,12 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     return Scaffold(
         appBar: AppBar(
           title: Row(children: [ const Text('Invoice'), Text(' Gen', style: TextStyle(color: Theme.of(context).colorScheme.primary))]),
-          toolbarHeight: 20,
+          toolbarHeight: 40,
         ),
         body: _screens[_currentIndex],
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            LoadInvoiceEvent();
+            InitInvoiceEvent();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const InvoiceGenerationScreen()),

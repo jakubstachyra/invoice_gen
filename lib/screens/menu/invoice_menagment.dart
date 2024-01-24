@@ -4,9 +4,9 @@ import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/classes/invoice.dart';
 import 'package:invoice_gen/classes/utils.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
-import 'package:invoice_gen/components/my_button.dart';
 import 'package:invoice_gen/components/my_text.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api.dart';
+import 'package:invoice_gen/pdfAPI/pdf_invoice_api.dart';
 import 'package:invoice_gen/screens/invoice/invoice_generation.dart';
 
 class InvoiceScreen extends StatelessWidget {
@@ -15,13 +15,14 @@ class InvoiceScreen extends StatelessWidget {
   final Invoice invoice;
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width * 0.1;
     return  Scaffold(
         appBar: MyAppBar(text: const Text("Invoice view"),
         callback: (){
+             context.read<InvoiceBloc>().add(InitInvoiceEvent());
             Navigator.pop(context);
         }),
-        body: SizedBox(
+        body: SafeArea(
+          child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.8,
               child: SafeArea(
@@ -34,7 +35,7 @@ class InvoiceScreen extends StatelessWidget {
               [
               Row(
                 children: [ Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:[
                     const MyTextGrey(text: "Invoice Date"),
@@ -53,10 +54,10 @@ class InvoiceScreen extends StatelessWidget {
                   //      MaterialPageRoute(builder: (context) => PdfPreviewScreen()),
                   // );
                 },
-                child:Column(children: [
-                Image.asset('assets/images/logo.png',
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height: MediaQuery.of(context).size.width * 0.2),
+                child:Column(
+
+                  children: [
+                Image.asset('assets/images/logo.png'),
                 Text("Tap for preview", style: TextStyle(fontSize: 12,
                  color: Colors.blue[900],
                 fontWeight: FontWeight.bold))
@@ -72,40 +73,35 @@ class InvoiceScreen extends StatelessWidget {
               const SizedBox(height: 80),
               Center(
               child:
-              Row(children:[ 
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                children:[ 
                 GestureDetector(
                   child: const  Icon(Icons.delete_forever, color: Colors.red),
                   onTap: () => {
                       PdfApi.deleteResourceFromFirestore(invoice.id),
                       Navigator.pop(context)
                 }),
-                SizedBox(width: width),
                 GestureDetector(
                   child: const  Icon(Icons.edit, color: Colors.grey),
                   onTap: () => {
-                      LoadInvoiceEvent(),
-                      Navigator.push(
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const InvoiceGenerationScreen()),
-                    )
+                      MaterialPageRoute(builder: (context) => const InvoiceGenerationScreen())),
+                      context.read<InvoiceBloc>().add(
+                      EditInvoiceEvent(invoice.seller,invoice.customer,invoice.items, invoice.details, invoice.id)),
+                      
                 }),  
-                SizedBox(width: width),
                 GestureDetector(
                   child: const  Icon(Icons.file_download_outlined, color: Colors.grey),
-                  onTap: () => {
-                    //Dodax jakies potwierdzenie
-                      LoadInvoiceEvent(),
-                      Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const InvoiceGenerationScreen()),
-                    )
-                }), 
-                 SizedBox(width: width),
+                  onTap: () async {
+                    final file = await PdfInvoiceApi.generate(invoice);
+                  }), 
                 GestureDetector(
                   child: const  Icon(Icons.email, color: Colors.grey),
                   onTap: () => {
                 }), 
-                SizedBox(width: width),
                 GestureDetector(
                   child: const  Icon(Icons.print, color: Colors.grey),
                   onTap: () => {
@@ -113,7 +109,6 @@ class InvoiceScreen extends StatelessWidget {
                 ])),
               ])
               ]),
-               
-            )));
+            ))));
   }
 }

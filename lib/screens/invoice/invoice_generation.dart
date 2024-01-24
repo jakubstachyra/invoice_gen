@@ -15,7 +15,7 @@ class InvoiceGenerationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
   return BlocListener<InvoiceBloc, InvoiceState>(
   listener: (context, state) {
-    if (state is InvoiceCompleted) {
+    if (state is InvoiceCompleted || state is InvoiceCancelled) {
       Navigator.pop(context);
     }
   },
