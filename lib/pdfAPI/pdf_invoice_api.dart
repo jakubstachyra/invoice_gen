@@ -1,14 +1,13 @@
 import 'package:flutter/services.dart';
 import 'package:invoice_gen/classes/invoice.dart';
 import 'package:invoice_gen/classes/utils.dart';
-import 'package:invoice_gen/pdfAPI/pdf_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
 
 class PdfInvoiceApi {
-  static Future<void> generate(Invoice invoice, String userID) async {
+  static Future<Uint8List> generate(Invoice invoice) async{
     final pdf = Document();
     final muktaRegular = await loadMuktaRegularFont();
 
@@ -23,9 +22,12 @@ class PdfInvoiceApi {
       ],
       footer: (context) => buildFooter(invoice),
     ));
-
-     //PdfApi.uploadFile(pdf, userID, invoice);
+    return convertDocumentToPdfData(pdf);
   }
+  
+  static Future<Uint8List> convertDocumentToPdfData(pw.Document document) async {
+  return document.save();
+}
 
   static Widget buildHeader(Invoice invoice, pw.Font font) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -5,11 +5,12 @@ abstract class InvoiceEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadInvoiceEvent extends InvoiceEvent {}
 
 class InitInvoiceEvent extends InvoiceEvent {}
 
 class CompleteInvoiceEvent extends InvoiceEvent {}
+
+class InvoiceCancelledEvent extends InvoiceEvent {}
 
 class NavigateToSellerPageEvent extends InvoiceEvent {}
 
@@ -56,6 +57,14 @@ class UpdateInvoiceDetailsEvent extends InvoiceEvent {
   final DateTime date;
   final DateTime due;
   UpdateInvoiceDetailsEvent({required this.invoiceID, required this.date, required this.place, required this.issuance, required this.due});
+}
+class EditInvoiceEvent extends InvoiceEvent {
+  final Company seller;
+  final Company customer;
+  final List<Item> items;
+  final Details details;
+  final String invoiceID;
+  EditInvoiceEvent(this.seller, this.customer, this.items, this.details, this.invoiceID);
 }
 
 

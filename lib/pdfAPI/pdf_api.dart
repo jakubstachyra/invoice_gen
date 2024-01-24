@@ -7,7 +7,9 @@ import 'package:invoice_gen/classes/supplemetary.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api_mobile.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api_web.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart';
+//import 'package:share_plus/share_plus.dart';
 
 class PdfApi {
  static Future<void> saveDocument({
@@ -80,4 +82,26 @@ static Future<void> deleteResourceFromFirestore(String resourceId) async {
  final invoice =  FirebaseFirestore.instance.collection('userFiles').doc(currentUser.uid).collection('invoices').doc(resourceId);
  invoice.delete();
 }
+
+static Future<void> updateData(String invoiceId, Company seller, Company customer, List<Item> items, Details details) async {
+
+  var sellerJson = seller.toMap();
+  var customerJson = customer.toMap();
+  var detailsJson = details.toMap();
+  var itemsJson = itemsToMapList(items);
+
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  final invoice = FirebaseFirestore.instance.collection('userFiles').doc(currentUser!.uid).collection('invoices').doc(invoiceId);
+
+  var updatedData = {
+    'seller': sellerJson,
+    'customer': customerJson,
+    'items': itemsJson,
+    'details': detailsJson,
+  };
+
+  await invoice.update(updatedData);
+}
+
+
 }

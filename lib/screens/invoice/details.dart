@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
+import 'package:invoice_gen/components/discard_text.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
 import 'package:invoice_gen/components/my_button.dart';
 import 'package:invoice_gen/components/my_textfield.dart';
@@ -25,7 +26,7 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MyAppBar(text: const Text("New Invoice"),
+        appBar: MyAppBar(text: const Text("Details"),
         callback: ()
         {
           BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
@@ -42,7 +43,6 @@ class DetailsScreen extends StatelessWidget {
                 textAlign: TextAlign.center,)),
                 
                 const SizedBox(height: 40),
-
 
                 SizedBox(
                     child: MyTextField(
@@ -91,6 +91,8 @@ class DetailsScreen extends StatelessWidget {
                         ));
                       context.read<InvoiceBloc>().add(NavigateToSummaryPageEvent());
                     }),
+                const SizedBox(height: 20),    
+                const DiscardButton()
               ],
             )));
   }

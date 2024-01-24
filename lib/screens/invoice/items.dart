@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
+import 'package:invoice_gen/components/discard_text.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
 import 'package:invoice_gen/components/my_button.dart';
 import 'package:invoice_gen/components/my_text.dart';
@@ -18,7 +19,7 @@ class ItemsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MyAppBar(text: const Text("New Invoice 2"),
+        appBar: MyAppBar(text: const Text("Products"),
         callback:() {
                 BlocProvider.of<InvoiceBloc>(context).add(NavigateToCustomerPageEvent());
               }),
@@ -27,7 +28,7 @@ class ItemsScreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 65,
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width,
                 child: const Text("What did you sell?",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,)),
@@ -62,6 +63,8 @@ class ItemsScreen extends StatelessWidget {
                  callback: (){
                       BlocProvider.of<InvoiceBloc>(context).add(NavigateToDetailsPageEvent());
                     }),
+                const SizedBox(height: 20),    
+                const DiscardButton()
               ]
             )));
   }

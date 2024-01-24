@@ -82,11 +82,12 @@ class _CombinedInvoicesScreenState extends State<CombinedInvoicesScreen>
                 var invoiceData = snapshot.data![index];
                 return ListTile(
                   title: Text("Invoice: ${invoiceData.details.id} ${Utils.formatDate(invoiceData.details.dateOfSale)}"),
-                  onTap: () {
+                  onTap: () async {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => InvoiceScreen(invoice: invoiceData)),
                       );
+                      refreshInvoices();
                   },
                 );
               },

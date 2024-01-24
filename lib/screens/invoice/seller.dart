@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
+import 'package:invoice_gen/components/discard_text.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
 import 'package:invoice_gen/components/my_button.dart';
 import 'package:invoice_gen/components/my_textfield.dart';
@@ -21,10 +22,10 @@ class SellerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: MyAppBar(
-          text: const Text("New Invoice"),
+          text: const Text("Seller"),
           callback: ()
           {
-            Navigator.pop(context);
+            BlocProvider.of<InvoiceBloc>(context).add(InvoiceCancelledEvent());
           },
         ),
         body: Padding(
@@ -63,7 +64,9 @@ class SellerScreen extends StatelessWidget {
                         ));
                       BlocProvider.of<InvoiceBloc>(context).add(NavigateToCustomerPageEvent());
                  }
-                )
+                ),
+                const SizedBox(height: 20),
+                const DiscardButton()
               ],
             ))));
   }

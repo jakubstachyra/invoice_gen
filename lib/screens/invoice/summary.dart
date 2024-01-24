@@ -29,7 +29,7 @@ class SummaryScreen extends StatelessWidget {
         }),
         body: SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.8,
+              height: MediaQuery.of(context).size.height,
               child: SafeArea(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -58,7 +58,10 @@ class SummaryScreen extends StatelessWidget {
                   //      MaterialPageRoute(builder: (context) => PdfPreviewScreen()),
                   // );
                 },
-                child:Column(children: [
+                child:Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.max,
+                children: [
                 Image.asset('assets/images/logo.png',
                   width: MediaQuery.of(context).size.width * 0.3,
                   height: MediaQuery.of(context).size.width * 0.2),
@@ -123,7 +126,7 @@ class SummaryScreen extends StatelessWidget {
               )),
               const SizedBox(height: 80),
               Center(
-              child: MyButton(text: "Save Invoice",
+              child: MyButton(text: "Save",
                 callback: () async{
                       context.read<InvoiceBloc>().add(CompleteInvoiceEvent());                
                   }))
