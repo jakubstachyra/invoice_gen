@@ -2,14 +2,17 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:invoice_gen/classes/invoice.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
+import 'package:invoice_gen/components/my_text.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api_mobile.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api_web.dart';
+import 'package:invoice_gen/pdfAPI/pdf_invoice_api.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart';
-//import 'package:share_plus/share_plus.dart';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 
 class PdfApi {
  static Future<void> saveDocument({
@@ -23,6 +26,43 @@ class PdfApi {
     }
   }
 
+static Future<void> saveFile(BuildContext context,Invoice invoice) async
+{
+  String? message;
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  
+  try{
+     
+      final response = await PdfInvoiceApi.generate(invoice);
+      if(kIsWeb)
+      {
+        downloadFileWeb2(response,"${invoice.details.id}.pdf");
+      }
+      else{
+      final dir = await getTemporaryDirectory();
+
+      var filename = '${dir.path}/${invoice.details.id}.pdf';
+
+      final file = File(filename);
+      await file.writeAsBytes(response);
+
+      final params = SaveFileDialogParams(sourceFilePath: filename);
+
+      final finalPath = await FlutterFileDialog.saveFile(params: params);
+      if(finalPath !=null)
+      {
+        message = "Invoice saved";
+      }
+      }
+
+  }catch(e)
+  {
+    message = "Error with file";
+  }
+  if(message != null){
+    scaffoldMessenger.showSnackBar(SnackBar(content: MyTextGrey(text: message)));
+  }
+}
   static Future openFile(File file) async {
     final url = file.path;
 
