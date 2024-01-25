@@ -5,6 +5,7 @@ import 'package:invoice_gen/classes/supplemetary.dart';
 import 'package:invoice_gen/components/discard_text.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
 import 'package:invoice_gen/components/my_button.dart';
+import 'package:invoice_gen/components/my_form_box.dart';
 import 'package:invoice_gen/components/my_text.dart';
 import 'package:invoice_gen/screens/invoice/add_item.dart';
 
@@ -14,10 +15,10 @@ class ItemsScreen extends StatelessWidget {
   final nameController = TextEditingController();
   final priceController = TextEditingController();
   final vatController = TextEditingController();
-  late List<Item> items = List.empty();
 
   @override
   Widget build(BuildContext context) {
+    late List<Item> items =  BlocProvider.of<InvoiceBloc>(context).items;
     return Scaffold(
         appBar: MyAppBar(text: const Text("Products"),
         callback:() {
@@ -43,7 +44,7 @@ class ItemsScreen extends StatelessWidget {
                   child: ListView.builder(
                       itemCount: items.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return ListTile(title: Text(items[index].name));
+                        return ListTile(title: MyFormBox(text: items[index].name));
                       }),
                 ),
                 MyButton(text: "Add item",

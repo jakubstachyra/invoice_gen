@@ -9,10 +9,11 @@ import 'package:invoice_gen/components/my_text.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api_mobile.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api_web.dart';
 import 'package:invoice_gen/pdfAPI/pdf_invoice_api.dart';
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
+import 'package:printing/printing.dart';
 
 class PdfApi {
  static Future<void> saveDocument({
@@ -63,22 +64,16 @@ static Future<void> saveFile(BuildContext context,Invoice invoice) async
     scaffoldMessenger.showSnackBar(SnackBar(content: MyTextGrey(text: message)));
   }
 }
-  static Future openFile(File file) async {
-    final url = file.path;
-
-    await OpenFile.open(url);
-  }
 
 static List<Map<String, dynamic>> itemsToMapList(List<Item> items) {
   return items.map((item) => item.toMap()).toList();
 }
-static Future<void> uploadData(Company seller, Company customer, List<Item> items, Details details) async {
+static Future<void> uploadInvoice(Company seller, Company customer, List<Item> items, Details details) async {
 
   var sellerJson = seller.toMap();
   var customerJson = customer.toMap();
   var detailsJson = details.toMap();
   var itemsJson = itemsToMapList(items);
-
 
   User? currentUser = FirebaseAuth.instance.currentUser;
   final invoice = FirebaseFirestore.instance.collection('userFiles').doc(currentUser!.uid).collection('invoices').doc();
@@ -88,7 +83,7 @@ static Future<void> uploadData(Company seller, Company customer, List<Item> item
     'customer': customerJson,
     'items': itemsJson,
     'details': detailsJson,
-    'id': invoice.id
+    'id': invoice.id,
   };
 
 
@@ -142,6 +137,10 @@ static Future<void> updateData(String invoiceId, Company seller, Company custome
 
   await invoice.update(updatedData);
 }
+static void print(Invoice invoice) async{
 
+  final pdf = await PdfInvoiceApi.generateForPrinting(invoice);
+  await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf.save());
 
+}
 }

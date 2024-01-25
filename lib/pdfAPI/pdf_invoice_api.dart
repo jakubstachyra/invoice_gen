@@ -24,6 +24,22 @@ class PdfInvoiceApi {
     ));
     return convertDocumentToPdfData(pdf);
   }
+  static Future<Document> generateForPrinting(Invoice invoice) async{
+    final pdf = Document();
+    final muktaRegular = await loadMuktaRegularFont();
+
+    pdf.addPage(MultiPage(
+      build: (context) => [
+        buildHeader(invoice, muktaRegular),
+        SizedBox(height: 3 * PdfPageFormat.cm),
+        buildTitle(invoice,muktaRegular),
+        buildInvoice(invoice,muktaRegular),
+        Divider(),
+        buildTotal(invoice,muktaRegular),
+      ],
+    ));
+    return pdf;
+  }
   
   static Future<Uint8List> convertDocumentToPdfData(pw.Document document) async {
   return document.save();
@@ -62,6 +78,8 @@ class PdfInvoiceApi {
   static Widget buildCustomerAddress(Company customer, pw.Font font) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text("Customer", style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 10),
           Text(customer.name, style: TextStyle(font:  font)),
           Text(customer.address),
         ],
@@ -98,6 +116,8 @@ class PdfInvoiceApi {
   static Widget buildSupplierAddress(Company supplier, pw.Font font) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text("Supplier", style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 10),
           Text(supplier.name, style: TextStyle(font: font)),
           SizedBox(height: 1 * PdfPageFormat.mm),
           Text(supplier.address, style: TextStyle(font: font)),
@@ -124,13 +144,13 @@ class PdfInvoiceApi {
       'Total'
     ];
     final data = invoice.items.map((item) {
-    final total = item.price * item.quantity * (1 + (item.tax * 0.1));
+    final total = item.price * item.quantity * (1 + (item.tax * 0.01));
 
       return [
         (item.name),
         '${item.quantity}',
         '\$ ${item.price}',
-        '${item.tax * 0.1} %',
+        '${item.tax} %',
         '\$ ${total.toStringAsFixed(2)}',
       ];
     }).toList();
@@ -154,12 +174,14 @@ class PdfInvoiceApi {
   }
 
   static Widget buildTotal(Invoice invoice, pw.Font font) {
-    final netTotal = invoice.items
-        .map((item) => item.price * item.quantity)
-        .reduce((item1, item2) => item1 + item2);
-    final vatPercent = invoice.items.first.tax;
-    final vat = netTotal * vatPercent;
-    final total = netTotal + vat;
+    double netTotal = 0;
+    double totalVat = 0;
+
+  for (var item in invoice.items) {
+    double itemTotal = item.price * item.quantity;
+    netTotal += itemTotal;
+    totalVat += itemTotal * (item.tax * 0.01); 
+  }
 
     return Container(
       alignment: Alignment.centerRight,
@@ -178,8 +200,8 @@ class PdfInvoiceApi {
                   font: font,
                 ),
                 buildText(
-                  title: 'Vat ${vatPercent} %',
-                  value: Utils.formatPrice(vat),
+                  title: 'Vat ${invoice.items[0].tax} %',
+                  value: Utils.formatPrice(totalVat),
                   unite: true,
                   font: font
                 ),
@@ -191,7 +213,7 @@ class PdfInvoiceApi {
                     fontWeight: FontWeight.bold,
                   ),
                   font: font,
-                  value: Utils.formatPrice(total),
+                  value: Utils.formatPrice(netTotal + totalVat),
                   unite: true,
                 ),
                 SizedBox(height: 2 * PdfPageFormat.mm),

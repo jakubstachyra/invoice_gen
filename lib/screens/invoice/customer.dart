@@ -7,6 +7,8 @@ import 'package:invoice_gen/components/my_button.dart';
 import 'package:invoice_gen/components/my_form_button.dart';
 import 'package:invoice_gen/components/my_text.dart';
 import 'package:invoice_gen/screens/invoice/add_customer.dart';
+import 'package:invoice_gen/screens/invoice/customers.dart';
+import 'package:invoice_gen/screens/invoice/items.dart';
 
 class CustomerScreen extends StatelessWidget {
   const CustomerScreen({super.key,
@@ -65,12 +67,9 @@ class CustomerScreen extends StatelessWidget {
                  MyFormButton(text: "See all clients",
                   icon: Icon(Icons.arrow_right,
                    color: Colors.blue[900],),
-                  callback:() => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) => AddCustomerScreen())
-                )}),
+                  callback:() {
+                    BlocProvider.of<InvoiceBloc>(context).add(DownloadCustomersEvent());
+                }),
                 
                 const SizedBox(height: 40,),
           

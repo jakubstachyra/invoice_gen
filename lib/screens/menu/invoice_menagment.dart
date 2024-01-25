@@ -4,6 +4,7 @@ import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/classes/invoice.dart';
 import 'package:invoice_gen/classes/utils.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
+import 'package:invoice_gen/components/my_button.dart';
 import 'package:invoice_gen/components/my_form_box.dart';
 import 'package:invoice_gen/components/my_form_box2.dart';
 import 'package:invoice_gen/components/my_text.dart';
@@ -28,7 +29,7 @@ class InvoiceScreen extends StatelessWidget {
           children: [
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 50),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 children: [
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -89,12 +90,10 @@ class InvoiceScreen extends StatelessWidget {
                               ...invoice.items.map((item) => Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 1),
                                 child: 
-                                MyFormBox(text: "${item.name} Qty: ${item.quantity} Price: ${item.price * item.quantity}\$")
+                                MyFormBox(text: item.name)
                                 
                               )).toList()]),
-                    ],
-                    
-                  ),                      
+                    ]),                      
                       const SizedBox(
                         height: 30,
                         child: Row(children: [MyTextGrey(text: "DETAILS")]),
@@ -141,13 +140,12 @@ class InvoiceScreen extends StatelessWidget {
                   GestureDetector(
                     child: const Icon(Icons.email, color: Colors.grey),
                     onTap: () => {
-                      // Dodaj logikę wysyłania e-maila tutaj
                     },
                   ),
                   GestureDetector(
                     child: const Icon(Icons.print, color: Colors.grey),
                     onTap: () => {
-                      // Dodaj logikę drukowania tutaj
+                      PdfApi.print(invoice)
                     },
                   ),
                 ],

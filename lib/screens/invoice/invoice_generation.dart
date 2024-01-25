@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/screens/invoice/customer.dart';
+import 'package:invoice_gen/screens/invoice/customers.dart';
 import 'package:invoice_gen/screens/invoice/details.dart';
 import 'package:invoice_gen/screens/invoice/items.dart';
 import 'package:invoice_gen/screens/invoice/seller.dart';
@@ -42,12 +43,14 @@ class InvoiceGenerationScreen extends StatelessWidget {
           nameController: TextEditingController(text: sellerData.name),
           tinController: TextEditingController(text: sellerData.tin),
           addressController: TextEditingController(text: sellerData.address),
-        );
-
-        } else if (state is InvoiceProductsPageState) {
+        );}
+           else if (state is CustomersPageState) {
+          return CustomersScreen(userCustomers: state.customers);
+          } 
+          else if (state is InvoiceProductsPageState) {
           return ItemsScreen();
-        
-        }else if(state is InvoiceDetailsPageState){
+        }
+        else if(state is InvoiceDetailsPageState){
           final detailsData = state.details;
           return DetailsScreen(
             placeController: TextEditingController(text:detailsData.place),
@@ -63,6 +66,7 @@ class InvoiceGenerationScreen extends StatelessWidget {
             items: state.products,
             details: state.details,
            );}
+
         return const CircularProgressIndicator();
       },
     ));
