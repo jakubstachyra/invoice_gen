@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
+import 'package:invoice_gen/components/boxes/my_form_box.dart';
+import 'package:invoice_gen/components/buttons/my_button.dart';
+import 'package:invoice_gen/components/buttons/discard_text.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
-import 'package:invoice_gen/components/my_button.dart';
-import 'package:invoice_gen/components/my_text.dart';
+import 'package:invoice_gen/components/my_texts/my_text.dart';
 import 'package:invoice_gen/screens/invoice/add_item.dart';
 
 class ItemsScreen extends StatelessWidget {
@@ -13,12 +15,24 @@ class ItemsScreen extends StatelessWidget {
   final nameController = TextEditingController();
   final priceController = TextEditingController();
   final vatController = TextEditingController();
-  late List<Item> items = List.empty();
 
   @override
   Widget build(BuildContext context) {
+    late List<Item> items =  BlocProvider.of<InvoiceBloc>(context).items;
     return Scaffold(
-        appBar: MyAppBar(text: const Text("New Invoice 2"),
+      bottomNavigationBar:BottomAppBar(
+        height: 115,
+        color: Colors.white,
+        child:  Column(
+          children: [
+                MyButton(text: "  Continue  ",
+                 callback: () {
+                  BlocProvider.of<InvoiceBloc>(context).add(NavigateToDetailsPageEvent());
+                    }),  
+                const SizedBox(height: 10),
+                const DiscardButton(),
+          ])),
+        appBar: MyAppBar(text: const Text("Products"),
         callback:() {
                 BlocProvider.of<InvoiceBloc>(context).add(NavigateToCustomerPageEvent());
               }),
@@ -27,7 +41,7 @@ class ItemsScreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 65,
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width,
                 child: const Text("What did you sell?",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,)),
@@ -42,7 +56,7 @@ class ItemsScreen extends StatelessWidget {
                   child: ListView.builder(
                       itemCount: items.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return ListTile(title: Text(items[index].name));
+                        return ListTile(title: MyFormBox(text: items[index].name));
                       }),
                 ),
                 MyButton(text: "Add item",
@@ -56,11 +70,6 @@ class ItemsScreen extends StatelessWidget {
                       if (newItem != null) {
                         items = List.from(items)..add(newItem);
                       }
-                    }),
-                const SizedBox(height: 20),
-                MyButton(text: "Continue",
-                 callback: (){
-                      BlocProvider.of<InvoiceBloc>(context).add(NavigateToDetailsPageEvent());
                     }),
               ]
             )));

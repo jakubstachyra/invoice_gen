@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:invoice_gen/components/my_textfield.dart';
+import 'package:invoice_gen/components/my_texts/my_textfield.dart';
 
 import '../../blocs/sign_in_bloc/sign_in_bloc.dart';
 

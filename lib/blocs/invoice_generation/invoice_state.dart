@@ -7,10 +7,20 @@ abstract class InvoiceState extends Equatable {
 
 class InvoiceInitial extends InvoiceState {}
 
+class InvoiceCompleted extends InvoiceState {}
+
+class InvoiceCancelled extends InvoiceState {}
+
 class InvoiceSellerUpdated extends InvoiceState {
   final Company seller;
   InvoiceSellerUpdated(this.seller);
 }
+
+class AddCustomerToFireBase extends InvoiceState{}
+
+class AddedCustomerToFireBase extends InvoiceState{}
+
+class DownloadedCustomersState extends InvoiceState {}
 
 class InvoiceCustomerUpdated extends InvoiceState {
   final Company customer;
@@ -27,8 +37,6 @@ class InvoiceDetailsUpdated extends InvoiceState {
   InvoiceDetailsUpdated(this.details);
 }
 
-class InvoiceCompleted extends InvoiceState {}
-
 class PdfPage extends InvoiceState {
   final String filePath;
   PdfPage(this.filePath);
@@ -39,6 +47,7 @@ class InvoiceFailure extends InvoiceState {
   InvoiceFailure({this.message = 'Error InvoiceGeneration'});
 }
 
+class EditInvoiceState extends InvoiceState{}
 
 class SellerPageState extends InvoiceState {
   final Company seller;
@@ -63,4 +72,8 @@ class SummaryPageState extends InvoiceState{
     final List<Item> products;
     final Details details;
     SummaryPageState(this.seller, this.customer,this.products, this.details);
+}
+class CustomersPageState extends InvoiceState{
+  final List<Company> customers;
+  CustomersPageState(this.customers);
 }

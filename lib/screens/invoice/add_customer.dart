@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
+import 'package:invoice_gen/components/buttons/my_button.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
-import 'package:invoice_gen/components/my_button.dart';
-import 'package:invoice_gen/components/my_text.dart';
-import 'package:invoice_gen/components/my_textfield.dart';
+import 'package:invoice_gen/components/my_texts/my_text.dart';
+import 'package:invoice_gen/components/my_texts/my_textfield.dart';
+
 
 class AddCustomerScreen extends StatelessWidget {
   AddCustomerScreen({super.key});
@@ -59,6 +60,7 @@ class AddCustomerScreen extends StatelessWidget {
                           address: addressController.text,
                           tin: tinController.text,
                         ));
+                   context.read<InvoiceBloc>().add(AddCustomerToFireBaseEvent(nameController.text, tinController.text, addressController.text));  
                    BlocProvider.of<InvoiceBloc>(context).add(NavigateToCustomerPageEvent());
                    Navigator.pop(context);
                  })

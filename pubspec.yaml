@@ -49,10 +49,10 @@ dependencies:
   user_repository:
     path: packages/user_repository
   flutter_native_splash: ^2.3.9
-  flutter_launcher_icons: ^0.13.1
   firebase_database: ^10.4.0
-  flutter_localizations:
-    sdk: flutter
+  flutter_file_dialog: ^3.0.2
+  printing: ^5.11.1
+  shared_preferences: ^2.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
