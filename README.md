@@ -46,9 +46,9 @@ An application allows you to generate invoices and keep them  in one place.
         *tax: int
 * Clients(for user purposes):
   *List<Company>
-    *name: String
-    *addres: String
-    *tin: String
+    * name: String
+    * addres: String
+    * tin: String
 ## User Guide
 ### Sign in/ Sign up
 *User can sign in using mail.
