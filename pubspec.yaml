@@ -53,6 +53,7 @@ dependencies:
   flutter_file_dialog: ^3.0.2
   #flutter_email_sender: ^6.0.2
   printing: ^5.11.1
+  shared_preferences: ^2.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

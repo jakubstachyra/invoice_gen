@@ -3,9 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
 import 'package:invoice_gen/classes/utils.dart';
+import 'package:invoice_gen/components/boxes/my_form_box.dart';
+import 'package:invoice_gen/components/boxes/my_form_box2.dart';
+import 'package:invoice_gen/components/boxes/my_form_box3.dart';
+import 'package:invoice_gen/components/buttons/my_button.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
-import 'package:invoice_gen/components/my_button.dart';
-import 'package:invoice_gen/components/my_text.dart';
+import 'package:invoice_gen/components/my_texts/my_text.dart';
 
 class SummaryScreen extends StatelessWidget {
   const SummaryScreen( {super.key,
@@ -38,92 +41,36 @@ class SummaryScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: 
               [
-              Row(
-                children: [ Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[
-                    const MyTextGrey(text: "Invoice Date"),
-                    Text(Utils.formatDate(details.dateOfSale)),
-                    const MyTextGrey(text: "Client"),
-                    Text(customer.name),
-                    const MyTextGrey(text: "Total Amount"),
-                  ]), 
-              
-              SizedBox(width: MediaQuery.of(context).size.width * 0.3),
-              GestureDetector(
-                onTap: (){
-                  //  Navigator.push(
-                  //     context,
-                  //      MaterialPageRoute(builder: (context) => PdfPreviewScreen()),
-                  // );
-                },
-                child:Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
                 Image.asset('assets/images/logo.png',
                   width: MediaQuery.of(context).size.width * 0.3,
                   height: MediaQuery.of(context).size.width * 0.2),
-                Text("Tap for preview", style: TextStyle(fontSize: 12,
-                 color: Colors.blue[900],
-                fontWeight: FontWeight.bold))
-              ],))
-              ]),
+              ],),
 
               const SizedBox(height: 30,
               child: Row(children: [ MyTextGrey(text: "BILL TO")])),
 
-              Card(color: Colors.grey.shade200,
-              child:
-              ListTile(
-                title: Text(customer.name),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[ 
-                  Text(customer.address),
-                  Text(customer.tin)],
-)
-              )),
+              MyFormBox3(text: customer.name, text2: customer.address, text3: customer.tin),
 
-              const SizedBox(height: 30,
-              child: Row(children: [ MyTextGrey(text: "ITEMS")])),
-              Card(color: Colors.grey.shade200,
-              child:
-              ListTile(
-                title: Text(customer.name),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[ 
-                  Text(customer.address),
-                  Text(customer.tin)],
-)
-              )),
+              Column(
+                  children: [
+                    const SizedBox(height: 30, child: Row(children: [MyTextGrey(text: "ITEMS")])),
+                    ...items.map((item) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 1),
+                      child: 
+                      MyFormBox(text: item.name)
+                      
+                    )).toList()]),
+              ]),   
                const SizedBox(height: 30,
-              child: Row(children: [ MyTextGrey(text: "Total")])),
-              Card(color: Colors.grey.shade200,
-              child:
-              ListTile(
-                title: Text(customer.name),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[ 
-                  Text(customer.address),
-                  Text(customer.tin)],
-)
-              )),
-              const SizedBox(height: 30),
-              Card(color: Colors.grey.shade200,
-              child:
-              ListTile(
-                title: Text(customer.name),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[ 
-                  Text(customer.address),
-                  Text(customer.tin)],
-)
-              )),
+              child: Row(children: [ MyTextGrey(text: "Details")])),
+              
+              MyFormBox3(text: details.id, text2: details.issuance, text3: details.place),
+              MyFormBox2(text:Utils.formatDate(details.dateOfSale), text2:Utils.formatDate(details.dateOfPayment)),
+ 
               const SizedBox(height: 80),
               Center(
               child: MyButton(text: "Save",
@@ -131,8 +78,8 @@ class SummaryScreen extends StatelessWidget {
                       context.read<InvoiceBloc>().add(CompleteInvoiceEvent());                
                   }))
               ])
-              ]),
+              ),
                
-            ))));
+            )));
   }
 }

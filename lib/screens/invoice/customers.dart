@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
-import 'package:invoice_gen/components/discard_text.dart';
+import 'package:invoice_gen/components/boxes/my_form_box.dart';
+import 'package:invoice_gen/components/buttons/discard_text.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
-import 'package:invoice_gen/components/my_form_box.dart';
-import 'package:invoice_gen/components/my_text.dart';
+import 'package:invoice_gen/components/my_texts/my_text.dart';
 
 class CustomersScreen extends StatelessWidget {
-  CustomersScreen({super.key, required this.userCustomers});
+  const CustomersScreen({super.key, required this.userCustomers});
   final List<Company> userCustomers;
 
   @override

@@ -45,11 +45,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   alignment: const Alignment(0,-0.7),
                   child: Image.asset('assets/images/logo.png',
                   width: MediaQuery.of(context).size.width * 0.5,
-                  height: MediaQuery.of(context).size.width * 0.6))),
+                  height: MediaQuery.of(context).size.width * 0.4))),
               Align(
                 alignment: const Alignment(0,1.3),
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.8,
+                  height: MediaQuery.of(context).size.height / 1.5,
                   child: Column(
                     children: [
                       Padding(

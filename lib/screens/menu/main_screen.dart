@@ -17,7 +17,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   final List<Widget> _screens = [
     const CombinedInvoicesScreen(),
     const ReportsScreen(),
-    const SettingsScreen(),
+    SettingsScreen(),
   ];
 
   @override
