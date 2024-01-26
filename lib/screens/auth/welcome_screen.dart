@@ -35,7 +35,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child:  
-          Stack(
+          ListView(
             children: [
               BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
@@ -44,8 +44,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               SafeArea(child: Align(
                   alignment: const Alignment(0,-0.7),
                   child: Image.asset('assets/images/logo.png',
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: MediaQuery.of(context).size.width * 0.4))),
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.width * 0.3))),
               Align(
                 alignment: const Alignment(0,1.3),
                 child: SizedBox(

@@ -55,6 +55,11 @@
                 key: _formKey,
                 child: Column(
                 children: [
+                   SizedBox(height: 65,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: const Text("Type your data!",
+                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,)),
                   SizedBox(
                       child: MyTextField(
                           controller: nameController,
