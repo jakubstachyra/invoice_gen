@@ -19,7 +19,7 @@ class _CombinedInvoicesScreenState extends State<CombinedInvoicesScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
      invoicesFuture = PdfApi.downloadData();
   }
 
@@ -46,7 +46,6 @@ class _CombinedInvoicesScreenState extends State<CombinedInvoicesScreen>
             Tab(text: 'All'),
             Tab(text: 'Open'),
             Tab(text: 'Paid'),
-            Tab(text: 'Overdue'),
           ],
         ),
       ),
@@ -56,7 +55,6 @@ class _CombinedInvoicesScreenState extends State<CombinedInvoicesScreen>
           _buildInvoiceListTab(), // for 'All'
           _buildInvoiceListTab(), // for 'Open'
           _buildInvoiceListTab(), // for 'Paid'
-          _buildInvoiceListTab(), // for 'Overdue'
         ],
       ),
     );
@@ -83,11 +81,12 @@ class _CombinedInvoicesScreenState extends State<CombinedInvoicesScreen>
                 return ListTile(
                   title: Text("Invoice: ${invoiceData.details.id} ${Utils.formatDate(invoiceData.details.dateOfSale)}"),
                   onTap: () async {
-                      Navigator.push(
+                      refreshInvoices();
+                     await Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => InvoiceScreen(invoice: invoiceData)),
                       );
-                      refreshInvoices();
+
                   },
                 );
               },

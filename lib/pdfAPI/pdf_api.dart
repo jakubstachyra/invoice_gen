@@ -2,14 +2,18 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:invoice_gen/classes/invoice.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
+import 'package:invoice_gen/components/my_text.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api_mobile.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api_web.dart';
-import 'package:open_file/open_file.dart';
+import 'package:invoice_gen/pdfAPI/pdf_invoice_api.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-//import 'package:share_plus/share_plus.dart';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
+import 'package:printing/printing.dart';
 
 class PdfApi {
  static Future<void> saveDocument({
@@ -23,22 +27,53 @@ class PdfApi {
     }
   }
 
-  static Future openFile(File file) async {
-    final url = file.path;
+static Future<void> saveFile(BuildContext context,Invoice invoice) async
+{
+  String? message;
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  
+  try{
+     
+      final response = await PdfInvoiceApi.generate(invoice);
+      if(kIsWeb)
+      {
+        downloadFileWeb2(response,"${invoice.details.id}.pdf");
+      }
+      else{
+      final dir = await getTemporaryDirectory();
 
-    await OpenFile.open(url);
+      var filename = '${dir.path}/${invoice.details.id}.pdf';
+
+      final file = File(filename);
+      await file.writeAsBytes(response);
+
+      final params = SaveFileDialogParams(sourceFilePath: filename);
+
+      final finalPath = await FlutterFileDialog.saveFile(params: params);
+      if(finalPath !=null)
+      {
+        message = "Invoice saved";
+      }
+      }
+
+  }catch(e)
+  {
+    message = "Error with file";
   }
+  if(message != null){
+    scaffoldMessenger.showSnackBar(SnackBar(content: MyTextGrey(text: message)));
+  }
+}
 
 static List<Map<String, dynamic>> itemsToMapList(List<Item> items) {
   return items.map((item) => item.toMap()).toList();
 }
-static Future<void> uploadData(Company seller, Company customer, List<Item> items, Details details) async {
+static Future<void> uploadInvoice(Company seller, Company customer, List<Item> items, Details details) async {
 
   var sellerJson = seller.toMap();
   var customerJson = customer.toMap();
   var detailsJson = details.toMap();
   var itemsJson = itemsToMapList(items);
-
 
   User? currentUser = FirebaseAuth.instance.currentUser;
   final invoice = FirebaseFirestore.instance.collection('userFiles').doc(currentUser!.uid).collection('invoices').doc();
@@ -48,7 +83,7 @@ static Future<void> uploadData(Company seller, Company customer, List<Item> item
     'customer': customerJson,
     'items': itemsJson,
     'details': detailsJson,
-    'id': invoice.id
+    'id': invoice.id,
   };
 
 
@@ -102,6 +137,10 @@ static Future<void> updateData(String invoiceId, Company seller, Company custome
 
   await invoice.update(updatedData);
 }
+static void print(Invoice invoice) async{
 
+  final pdf = await PdfInvoiceApi.generateForPrinting(invoice);
+  await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf.save());
 
+}
 }

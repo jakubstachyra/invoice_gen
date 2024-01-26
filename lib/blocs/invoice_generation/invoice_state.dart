@@ -16,6 +16,12 @@ class InvoiceSellerUpdated extends InvoiceState {
   InvoiceSellerUpdated(this.seller);
 }
 
+class AddCustomerToFireBase extends InvoiceState{}
+
+class AddedCustomerToFireBase extends InvoiceState{}
+
+class DownloadedCustomersState extends InvoiceState {}
+
 class InvoiceCustomerUpdated extends InvoiceState {
   final Company customer;
   InvoiceCustomerUpdated(this.customer);
@@ -66,4 +72,8 @@ class SummaryPageState extends InvoiceState{
     final List<Item> products;
     final Details details;
     SummaryPageState(this.seller, this.customer,this.products, this.details);
+}
+class CustomersPageState extends InvoiceState{
+  final List<Company> customers;
+  CustomersPageState(this.customers);
 }

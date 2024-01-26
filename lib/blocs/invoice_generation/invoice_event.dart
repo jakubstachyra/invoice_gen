@@ -22,6 +22,8 @@ class NavigateToDetailsPageEvent extends InvoiceEvent {}
 
 class NavigateToSummaryPageEvent extends InvoiceEvent {}
 
+class NavigateToCustomersPageEvent extends InvoiceEvent {}
+
 class NavigateToPdfPageEvent extends InvoiceEvent {
   final String filePath;
   NavigateToPdfPageEvent(this.filePath);
@@ -40,6 +42,13 @@ class UpdateCustomerEvent extends InvoiceEvent {
   final String tin;
   UpdateCustomerEvent({required this.name, required this.address, required this.tin});
 }
+class AddCustomerToFireBaseEvent extends InvoiceEvent{
+  final String name;
+  final String tin;
+  final String adress;
+  AddCustomerToFireBaseEvent(this.name,this.tin, this.adress);
+}
+class DownloadCustomersEvent extends InvoiceEvent{}
 
 class AddProductEvent extends InvoiceEvent {
   final String name;

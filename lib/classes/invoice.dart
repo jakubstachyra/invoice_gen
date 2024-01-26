@@ -8,7 +8,6 @@ class Invoice {
   String id;
   Invoice(this._seller, this._customer, this._items, this._details,this.id);
 
-
    Company get seller {
     return _seller;
    }
@@ -23,4 +22,11 @@ class Invoice {
    Details get details {
      return _details;
    }
+  //  Status get status{
+  //   return _status;
+  //  }
+  //  set setStatus(Status status) {
+  //   _status = status;
+  // }
 }
+enum Status {paid, open}

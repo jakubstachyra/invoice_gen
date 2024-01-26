@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MyFormBox extends StatelessWidget {
+class MyFormBox2 extends StatelessWidget {
   final String text;
-  const MyFormBox({super.key,
-   required this.text});
+  final String text2;
+  const MyFormBox2({super.key,
+   required this.text,
+   required this.text2});
 
 
 @override
@@ -15,13 +17,24 @@ return GestureDetector(
       color: Colors.grey[200],
       borderRadius: BorderRadius.circular(10),
     ),
-    child: Padding(
+      child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: 
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
         children: [
+          SizedBox(
+            child:
           Text(
             text,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+            ))),
+            Text(
+            text2,
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: Colors.black,
@@ -32,6 +45,5 @@ return GestureDetector(
         ],
       ),
     ),
-  ),
-);
+  ));
 }}

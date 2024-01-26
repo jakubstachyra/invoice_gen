@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,9 +10,9 @@ part 'invoice_state.dart';
 
 
 class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
-
   List<Item> items = [];
   User? currentUser = FirebaseAuth.instance.currentUser;
+  late List<Company> userCustomers = [];
   late Company seller = Company("","","");
   late Company customer = Company("","","");
   late bool isEditing = false;
@@ -37,6 +38,10 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       emit(CustomerPageState(customer));
     });
 
+    on<NavigateToCustomersPageEvent>((event, emit) {
+      emit(CustomersPageState(userCustomers));
+    });
+
     on<NavigateToProductsPageEvent>((event, emit) {
       emit(InvoiceProductsPageState(items));
     });
@@ -47,6 +52,7 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     on<NavigateToSummaryPageEvent>((event, emit) {
       emit(SummaryPageState(seller,customer,items, details));
     });
+
     on<NavigateToPdfPageEvent>((event, emit) {
       final String filePath = event.filePath;
       emit(PdfPage(filePath));
@@ -73,6 +79,16 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       emit(InvoiceCustomerUpdated(customer));
     });
 
+    on<AddCustomerToFireBaseEvent>((event, emit){
+      uploadCustomer(Company(event.name, event.adress, event.tin));
+      emit(AddedCustomerToFireBase());
+      });
+
+    on<DownloadCustomersEvent>(((event, emit) async {
+      userCustomers= await downloadCustomers();
+      emit(DownloadedCustomersState());
+      emit(CustomersPageState(userCustomers));
+    }));
 
     on<AddProductEvent>((event, emit) {
       items.add(Item(event.price, event.name, event.tax, event.quantity));
@@ -94,7 +110,7 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
               emit(InvoiceCompleted());
             }
             else{
-               await PdfApi.uploadData(seller, customer, items, details);
+               await PdfApi.uploadInvoice(seller, customer, items, details);
               emit(InvoiceCompleted());
             }
 
@@ -113,6 +129,32 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     isEditing = false;
     editingInvoiceID = "";
   }
+  Future<void> uploadCustomer(Company customer) async{
+  var customerJson = customer.toMap();
+
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  final invoice = FirebaseFirestore.instance.collection('userFiles').doc(currentUser!.uid).collection('clients').doc();
+
+  await invoice.set(customerJson);
+}
+ Future<List<Company>> downloadCustomers() async {
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser == null) {
+    throw Exception("User not logged in");
+  }
+
+  CollectionReference collection = FirebaseFirestore.instance.collection('userFiles').doc(currentUser.uid).collection('clients');
+
+  QuerySnapshot querySnapshot = await collection.get();
+
+  return querySnapshot.docs.map((doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+    Company customer = Company.fromMap(data);
+    return customer;
+  }).toList();
+}
+
 }
 
 

@@ -59,6 +59,7 @@ class AddCustomerScreen extends StatelessWidget {
                           address: addressController.text,
                           tin: tinController.text,
                         ));
+                   context.read<InvoiceBloc>().add(AddCustomerToFireBaseEvent(nameController.text, tinController.text, addressController.text));  
                    BlocProvider.of<InvoiceBloc>(context).add(NavigateToCustomerPageEvent());
                    Navigator.pop(context);
                  })
