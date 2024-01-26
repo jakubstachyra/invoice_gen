@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
-import 'package:invoice_gen/components/discard_text.dart';
+import 'package:invoice_gen/components/buttons/my_button.dart';
+import 'package:invoice_gen/components/buttons/my_form_button.dart';
+import 'package:invoice_gen/components/buttons/discard_text.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
-import 'package:invoice_gen/components/my_button.dart';
-import 'package:invoice_gen/components/my_form_button.dart';
-import 'package:invoice_gen/components/my_text.dart';
+import 'package:invoice_gen/components/my_texts/my_text.dart';
 import 'package:invoice_gen/screens/invoice/add_customer.dart';
-import 'package:invoice_gen/screens/invoice/customers.dart';
-import 'package:invoice_gen/screens/invoice/items.dart';
 
 class CustomerScreen extends StatelessWidget {
   const CustomerScreen({super.key,
@@ -23,6 +21,23 @@ class CustomerScreen extends StatelessWidget {
   @override 
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: BottomAppBar(
+        height: 115,
+        color: Colors.white,
+        child:  Column(
+          children: [
+                      MyButton(text: "Continue",
+                 callback: () {
+                      BlocProvider.of<InvoiceBloc>(context).add(UpdateCustomerEvent(
+                        name: nameController.text, 
+                        address: addressController.text, 
+                        tin: tinController.text,
+                        ));
+                      BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
+                    }),
+                const SizedBox(height: 10),
+                const DiscardButton()
+          ])),
         appBar: MyAppBar(text: const Text("Customer"),
         callback:() {
                 BlocProvider.of<InvoiceBloc>(context).add(NavigateToSellerPageEvent());
@@ -72,18 +87,6 @@ class CustomerScreen extends StatelessWidget {
                 }),
                 
                 const SizedBox(height: 40,),
-          
-                MyButton(text: "Continue",
-                 callback: () {
-                      BlocProvider.of<InvoiceBloc>(context).add(UpdateCustomerEvent(
-                        name: nameController.text, 
-                        address: addressController.text, 
-                        tin: tinController.text,
-                        ));
-                      BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
-                    }),
-                const SizedBox(height: 20),
-                const DiscardButton()
               ],
             )), );
   }

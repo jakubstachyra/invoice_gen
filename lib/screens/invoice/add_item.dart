@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
+import 'package:invoice_gen/components/buttons/discard_text.dart';
+import 'package:invoice_gen/components/buttons/my_button.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
-import 'package:invoice_gen/components/my_button.dart';
-import 'package:invoice_gen/components/my_textfield.dart';
+import 'package:invoice_gen/components/my_texts/my_textfield.dart';
 
 class AddItemScreen extends StatelessWidget {
   AddItemScreen({super.key});
@@ -16,6 +17,26 @@ class AddItemScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+         height: 115,
+        color: Colors.white,
+        child:  Column(
+          children: [
+                MyButton(text: "  Add item ",
+                 callback: () {
+                          context.read<InvoiceBloc>().add(AddProductEvent(
+                          name: nameController.text,
+                          price: double.parse(priceController.text),
+                          tax: int.parse(taxController.text),
+                          quantity: int.parse(quantityController.text)
+                        ));
+                    BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
+                    Navigator.pop(context);
+                    }),  
+                const SizedBox(height: 10),
+                const DiscardButton(),
+          ])
+      ),
         appBar: MyAppBar(text: const Text("Add item"),
         callback: (){
           BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
@@ -51,19 +72,7 @@ class AddItemScreen extends StatelessWidget {
                         controller: quantityController,
                         hintText: "Quantity",
                         obscureText: false,
-                        keyboardType: TextInputType.number)),
-                MyButton(text: "Add Item", 
-                callback: ()
-                {
-                    context.read<InvoiceBloc>().add(AddProductEvent(
-                          name: nameController.text,
-                          price: double.parse(priceController.text),
-                          tax: int.parse(taxController.text),
-                          quantity: int.parse(quantityController.text)
-                        ));
-                    BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
-                    Navigator.pop(context);
-                })]
+                        keyboardType: TextInputType.number))]
             )));
   }
 }

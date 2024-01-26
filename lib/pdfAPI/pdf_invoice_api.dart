@@ -6,8 +6,9 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
 
+
 class PdfInvoiceApi {
-  static Future<Uint8List> generate(Invoice invoice) async{
+  static Future<Uint8List> generate(Invoice invoice, PdfColor color) async{
     final pdf = Document();
     final muktaRegular = await loadMuktaRegularFont();
 
@@ -16,26 +17,27 @@ class PdfInvoiceApi {
         buildHeader(invoice, muktaRegular),
         SizedBox(height: 3 * PdfPageFormat.cm),
         buildTitle(invoice,muktaRegular),
-        buildInvoice(invoice,muktaRegular),
+        buildInvoice(invoice,muktaRegular,color),
         Divider(),
-        buildTotal(invoice,muktaRegular),
+        buildTotal(invoice,muktaRegular, color),
       ],
       footer: (context) => buildFooter(invoice),
     ));
     return convertDocumentToPdfData(pdf);
   }
-  static Future<Document> generateForPrinting(Invoice invoice) async{
+  static Future<Document> generateForPrinting(Invoice invoice, PdfColor color) async{
     final pdf = Document();
     final muktaRegular = await loadMuktaRegularFont();
 
+
     pdf.addPage(MultiPage(
-      build: (context) => [
+      build: (context)  => [
         buildHeader(invoice, muktaRegular),
         SizedBox(height: 3 * PdfPageFormat.cm),
         buildTitle(invoice,muktaRegular),
-        buildInvoice(invoice,muktaRegular),
+        buildInvoice(invoice,muktaRegular,color),
         Divider(),
-        buildTotal(invoice,muktaRegular),
+        buildTotal(invoice,muktaRegular,color),
       ],
     ));
     return pdf;
@@ -87,7 +89,7 @@ class PdfInvoiceApi {
 
   static Widget buildInvoiceInfo(Invoice invoice, pw.Font font) {
     final info = invoice.details;
-    //final paymentTerms = '${info.dateOfPayment.difference(info.dateOfSale).inDays} days';
+    final paymentTerms = '${info.dateOfPayment.difference(info.dateOfSale).inDays} days';
     final titles = <String>[
       'Invoice Number:',
       'Invoice Date:',
@@ -97,8 +99,7 @@ class PdfInvoiceApi {
     final data = <String>[
       info.id,
       Utils.formatDate(info.dateOfSale),
-      info.place,
-      //paymentTerms,
+      paymentTerms,
       Utils.formatDate(info.dateOfPayment),
     ];
 
@@ -135,7 +136,7 @@ class PdfInvoiceApi {
         ],
       );
 
-  static Widget buildInvoice(Invoice invoice, pw.Font font) {
+  static Widget buildInvoice(Invoice invoice, pw.Font font, PdfColor color)  {
     final headers = [
       'Product',
       'Quantity',
@@ -160,7 +161,7 @@ class PdfInvoiceApi {
       data: data,
       border: null,
       headerStyle: TextStyle(font: font),
-      headerDecoration: const BoxDecoration(color: PdfColors.grey300),
+      headerDecoration:  BoxDecoration(color: color),
       cellHeight: 30,
       cellAlignments: {
         0: Alignment.centerLeft,
@@ -173,7 +174,7 @@ class PdfInvoiceApi {
     );
   }
 
-  static Widget buildTotal(Invoice invoice, pw.Font font) {
+  static Widget buildTotal(Invoice invoice, pw.Font font, PdfColor color) {
     double netTotal = 0;
     double totalVat = 0;
 
@@ -217,9 +218,9 @@ class PdfInvoiceApi {
                   unite: true,
                 ),
                 SizedBox(height: 2 * PdfPageFormat.mm),
-                Container(height: 1, color: PdfColors.grey400),
+                Container(height: 1, color: color),
                 SizedBox(height: 0.5 * PdfPageFormat.mm),
-                Container(height: 1, color: PdfColors.grey400),
+                Container(height: 1, color: color),
               ],
             ),
           ),

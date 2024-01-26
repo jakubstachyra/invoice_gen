@@ -3,11 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/classes/invoice.dart';
 import 'package:invoice_gen/classes/utils.dart';
+import 'package:invoice_gen/components/boxes/my_form_box2.dart';
+import 'package:invoice_gen/components/boxes/my_form_box3.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
-import 'package:invoice_gen/components/my_button.dart';
-import 'package:invoice_gen/components/my_form_box.dart';
-import 'package:invoice_gen/components/my_form_box2.dart';
-import 'package:invoice_gen/components/my_text.dart';
+import 'package:invoice_gen/components/my_texts/my_text.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api.dart';
 import 'package:invoice_gen/screens/invoice/invoice_generation.dart';
 
@@ -37,60 +36,36 @@ class InvoiceScreen extends StatelessWidget {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const MyTextGrey(text: "Invoice Date"),
-                              Text(Utils.formatDate(invoice.details.dateOfSale)),
-                              const MyTextGrey(text: "Client"),
-                              Text(invoice.customer.name),
-                              const MyTextGrey(text: "Total Amount"),
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => PdfPreviewScreen()),
-                              // );
-                            },
-                            child: Column(
+                            Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                FittedBox(
+                                  child:
                                 Image.asset(
                                   'assets/images/logo.png',
                                   height: MediaQuery.of(context).size.height * 0.3,
                                   width: MediaQuery.of(context).size.height * 0.2,
-                                ),
-                                Text(
-                                  "Tap for preview",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.blue[900],
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                )),
                               ],
                             ),
-                          ),
                         ],
                       ),
                       const SizedBox(
                         height: 30,
                         child: Row(children: [MyTextGrey(text: "BILL TO")]),
                       ),
-                      MyFormBox(text: invoice.customer.name),
+                      MyFormBox3(text: invoice.customer.name,text2: invoice.customer.address,text3: invoice.customer.tin),
                       Column(
                             children: [
                               const SizedBox(height: 30, child: Row(children: [MyTextGrey(text: "ITEMS")])),
                               ...invoice.items.map((item) => Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 1),
                                 child: 
-                                MyFormBox(text: item.name)
+                                MyFormBox3(text: "Name: ${item.name}",text2: " Quantity: ${item.quantity.toString()}x",
+                                 text3: "Per unit: ${item.price.toString()}\$")
                                 
                               )).toList()]),
                     ]),                      
@@ -100,10 +75,12 @@ class InvoiceScreen extends StatelessWidget {
                       ), Column(
                         children:[
                       MyFormBox2(text: "Invoice Number: ", text2: invoice.details.id),
-                      const SizedBox(height: 1),
+                      const SizedBox(height: 2),
                       MyFormBox2(text: "Invoice Date: ", text2: Utils.formatDate(invoice.details.dateOfSale)),
-                      const SizedBox(height: 1),
-                      MyFormBox2(text: "Payment date ", text2: Utils.formatDate(invoice.details.dateOfPayment))])
+                      const SizedBox(height: 2),
+                      MyFormBox2(text: "Payment date ", text2: Utils.formatDate(invoice.details.dateOfPayment))]),
+                      const SizedBox(height: 10),
+                      
                 ],
               ),
             ),
@@ -135,11 +112,6 @@ class InvoiceScreen extends StatelessWidget {
                     child: const Icon(Icons.file_download_outlined, color: Colors.grey),
                     onTap: () async {
                       PdfApi.saveFile(context, invoice);
-                    },
-                  ),
-                  GestureDetector(
-                    child: const Icon(Icons.email, color: Colors.grey),
-                    onTap: () => {
                     },
                   ),
                   GestureDetector(

@@ -1,11 +1,13 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:invoice_gen/blocs/invoice_color/functions_color.dart';
 import 'package:invoice_gen/classes/invoice.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
-import 'package:invoice_gen/components/my_text.dart';
+import 'package:invoice_gen/components/my_texts/my_text.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api_mobile.dart';
 import 'package:invoice_gen/pdfAPI/pdf_api_web.dart';
 import 'package:invoice_gen/pdfAPI/pdf_invoice_api.dart';
@@ -34,7 +36,7 @@ static Future<void> saveFile(BuildContext context,Invoice invoice) async
   
   try{
      
-      final response = await PdfInvoiceApi.generate(invoice);
+      final response = await PdfInvoiceApi.generate(invoice, await InvoiceColorPreferences.getDefaultInvoiceColor());
       if(kIsWeb)
       {
         downloadFileWeb2(response,"${invoice.details.id}.pdf");
@@ -139,8 +141,45 @@ static Future<void> updateData(String invoiceId, Company seller, Company custome
 }
 static void print(Invoice invoice) async{
 
-  final pdf = await PdfInvoiceApi.generateForPrinting(invoice);
+  final pdf = await PdfInvoiceApi.generateForPrinting(invoice, await InvoiceColorPreferences.getDefaultInvoiceColor());
   await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf.save());
 
+}
+
+static Future<String> saveToTemp(BuildContext context, Invoice invoice) async {
+  String? message;
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+  try {
+    final pdfData = await PdfInvoiceApi.generate(invoice,await InvoiceColorPreferences.getDefaultInvoiceColor());
+
+    if (kIsWeb) {
+      // Dla aplikacji webowych, wyświetl PDF bezpośrednio w przeglądarce
+      downloadFileWeb2(pdfData, "${invoice.details.id}.pdf");
+      return "";
+    } else {
+
+      final dir = await getTemporaryDirectory();
+      final file = File('${dir.path}/${invoice.details.id}.pdf');
+      await file.writeAsBytes(pdfData);
+      message = "";
+      return file.path;
+    }
+  } catch (e) {
+    message = "Save to temp error";
+  }
+
+  if (message.isEmpty == false) {
+    scaffoldMessenger.showSnackBar(SnackBar(content: MyTextGrey(text: message)));
+  }
+  return "";
+}
+static Future<void> updateInvoiceStatus(String invoiceId, Status newStatus) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser == null) {
+    throw Exception("User not logged in");
+  }
+  await firestore.collection('userFiles').doc(currentUser.uid).collection('invoices').doc(invoiceId).update({'status': newStatus});
 }
 }

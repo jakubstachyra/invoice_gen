@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/classes/supplemetary.dart';
-import 'package:invoice_gen/components/discard_text.dart';
+import 'package:invoice_gen/components/boxes/my_form_box.dart';
+import 'package:invoice_gen/components/buttons/my_button.dart';
+import 'package:invoice_gen/components/buttons/discard_text.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
-import 'package:invoice_gen/components/my_button.dart';
-import 'package:invoice_gen/components/my_form_box.dart';
-import 'package:invoice_gen/components/my_text.dart';
+import 'package:invoice_gen/components/my_texts/my_text.dart';
 import 'package:invoice_gen/screens/invoice/add_item.dart';
 
 class ItemsScreen extends StatelessWidget {
@@ -20,6 +20,18 @@ class ItemsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     late List<Item> items =  BlocProvider.of<InvoiceBloc>(context).items;
     return Scaffold(
+      bottomNavigationBar:BottomAppBar(
+        height: 115,
+        color: Colors.white,
+        child:  Column(
+          children: [
+                MyButton(text: "  Continue  ",
+                 callback: () {
+                  BlocProvider.of<InvoiceBloc>(context).add(NavigateToDetailsPageEvent());
+                    }),  
+                const SizedBox(height: 10),
+                const DiscardButton(),
+          ])),
         appBar: MyAppBar(text: const Text("Products"),
         callback:() {
                 BlocProvider.of<InvoiceBloc>(context).add(NavigateToCustomerPageEvent());
@@ -59,13 +71,6 @@ class ItemsScreen extends StatelessWidget {
                         items = List.from(items)..add(newItem);
                       }
                     }),
-                const SizedBox(height: 20),
-                MyButton(text: "Continue",
-                 callback: (){
-                      BlocProvider.of<InvoiceBloc>(context).add(NavigateToDetailsPageEvent());
-                    }),
-                const SizedBox(height: 20),    
-                const DiscardButton()
               ]
             )));
   }

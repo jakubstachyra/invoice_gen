@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:invoice_gen/components/my_icon_button.dart';
+import 'package:invoice_gen/components/buttons/my_icon_button.dart';
+
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({
@@ -23,5 +24,5 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(100); // Ustaw wysokość AppBar
+  Size get preferredSize => const Size.fromHeight(100); 
 }

@@ -115,8 +115,7 @@ class Item {
     };
   }
   factory Item.fromMap(Map<String, dynamic> map) {
-    final double price = map['price'];
-  
+    final double price = double.parse( map['price'].toString());
   return Item(
     price,
     map['name'] as String,

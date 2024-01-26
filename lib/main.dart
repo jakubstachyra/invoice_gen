@@ -29,6 +29,7 @@ void main() async {
       BlocProvider<InvoiceBloc>(
         create: (context) => InvoiceBloc(),
       ),
+      
     ],
     child: MyApp(FirebaseUserRepo()),
   ));
