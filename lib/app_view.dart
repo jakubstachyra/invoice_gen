@@ -27,7 +27,7 @@ class MyAppView extends StatelessWidget {
                 userRepository: context.read<AuthenticationBloc>().userRepository,
               )),
               BlocProvider(
-              create: (context) => InvoiceColorBloc())],
+              create: (context) => InvoiceColorBloc()),],
                 child: const MainScreen(),
             );
           } else {

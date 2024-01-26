@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
 import 'package:invoice_gen/screens/invoice/invoice_generation.dart';
 import 'package:invoice_gen/screens/menu/invoices.dart';
-import 'package:invoice_gen/screens/menu/reports_screen.dart';
 import 'package:invoice_gen/screens/menu/settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -16,7 +15,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   int _currentIndex = 0;
   final List<Widget> _screens = [
     const CombinedInvoicesScreen(),
-    const ReportsScreen(),
     SettingsScreen(),
   ];
 
@@ -51,10 +49,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             BottomNavigationBarItem(
               icon: Icon(Icons.note),
               label: 'Invoices',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.assessment),
-              label: 'Reports',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),
