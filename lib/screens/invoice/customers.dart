@@ -14,6 +14,7 @@ class CustomersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        
         appBar: MyAppBar(text: const Text("Customers"),
         callback:() {
                 BlocProvider.of<InvoiceBloc>(context).add(NavigateToCustomerPageEvent());

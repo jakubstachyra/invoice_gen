@@ -23,6 +23,23 @@
     @override
     Widget build(BuildContext context) {
       return Scaffold(
+        bottomNavigationBar: BottomAppBar(
+        height: 115,
+        color: Colors.white,
+        child:  Column(
+          children: [
+                MyButton(text: "Continue",
+                 callback: () {
+               BlocProvider.of<InvoiceBloc>(context).add(UpdateSellerEvent(
+                          name: nameController.text, 
+                          address: addressController.text, 
+                          tin: tinController.text,
+                          ));
+                        BlocProvider.of<InvoiceBloc>(context).add(NavigateToCustomerPageEvent());
+                    }),  
+                const SizedBox(height: 10),
+                const DiscardButton(),
+          ])),
           appBar: MyAppBar(
             text: const Text("Seller"),
             callback: ()
@@ -61,20 +78,7 @@
                           obscureText: false,
                           keyboardType: TextInputType.text,
                           validator:  MyTextFieldValidators.numberNotEmptyValidator,)),
-                  const SizedBox(height: 20),
-                  MyButton(text: "Continue",
-                  callback: () {
-                          BlocProvider.of<InvoiceBloc>(context).add(UpdateSellerEvent(
-                          name: nameController.text, 
-                          address: addressController.text, 
-                          tin: tinController.text,
-                          ));
-                        BlocProvider.of<InvoiceBloc>(context).add(NavigateToCustomerPageEvent());
-                  }
-                  ),
-                  const SizedBox(height: 20),
-                  const DiscardButton()
-                ],
-              )))));
+                  const SizedBox(height: 20),]
+                )))));
     }
   }

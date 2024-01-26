@@ -20,6 +20,18 @@ class ItemsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     late List<Item> items =  BlocProvider.of<InvoiceBloc>(context).items;
     return Scaffold(
+      bottomNavigationBar:BottomAppBar(
+        height: 115,
+        color: Colors.white,
+        child:  Column(
+          children: [
+                MyButton(text: "  Continue  ",
+                 callback: () {
+                  BlocProvider.of<InvoiceBloc>(context).add(NavigateToDetailsPageEvent());
+                    }),  
+                const SizedBox(height: 10),
+                const DiscardButton(),
+          ])),
         appBar: MyAppBar(text: const Text("Products"),
         callback:() {
                 BlocProvider.of<InvoiceBloc>(context).add(NavigateToCustomerPageEvent());
@@ -59,13 +71,6 @@ class ItemsScreen extends StatelessWidget {
                         items = List.from(items)..add(newItem);
                       }
                     }),
-                const SizedBox(height: 20),
-                MyButton(text: "Continue",
-                 callback: (){
-                      BlocProvider.of<InvoiceBloc>(context).add(NavigateToDetailsPageEvent());
-                    }),
-                const SizedBox(height: 20),    
-                const DiscardButton()
               ]
             )));
   }

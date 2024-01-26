@@ -115,11 +115,6 @@ class InvoiceScreen extends StatelessWidget {
                     },
                   ),
                   GestureDetector(
-                    child: const Icon(Icons.email, color: Colors.grey),
-                    onTap: () => {
-                    },
-                  ),
-                  GestureDetector(
                     child: const Icon(Icons.print, color: Colors.grey),
                     onTap: () => {
                       PdfApi.print(invoice)

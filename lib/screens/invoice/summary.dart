@@ -6,6 +6,7 @@ import 'package:invoice_gen/classes/utils.dart';
 import 'package:invoice_gen/components/boxes/my_form_box.dart';
 import 'package:invoice_gen/components/boxes/my_form_box2.dart';
 import 'package:invoice_gen/components/boxes/my_form_box3.dart';
+import 'package:invoice_gen/components/buttons/discard_text.dart';
 import 'package:invoice_gen/components/buttons/my_button.dart';
 import 'package:invoice_gen/components/my_app_bar.dart';
 import 'package:invoice_gen/components/my_texts/my_text.dart';
@@ -26,6 +27,17 @@ class SummaryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+        bottomNavigationBar: BottomAppBar(
+        height: 115,
+        color: Colors.white,
+        child:  Column(
+          children: [
+               MyButton(text: "Save invoice",
+                callback: () async{
+                      context.read<InvoiceBloc>().add(CompleteInvoiceEvent());                
+                    }),
+                   const DiscardButton()
+                    ])),
         appBar: MyAppBar(text: const Text("New Invoice"),
         callback: (){
             BlocProvider.of<InvoiceBloc>(context).add(NavigateToDetailsPageEvent());
@@ -72,11 +84,7 @@ class SummaryScreen extends StatelessWidget {
               MyFormBox2(text:Utils.formatDate(details.dateOfSale), text2:Utils.formatDate(details.dateOfPayment)),
  
               const SizedBox(height: 80),
-              Center(
-              child: MyButton(text: "Save",
-                callback: () async{
-                      context.read<InvoiceBloc>().add(CompleteInvoiceEvent());                
-                  }))
+
               ])
               ),
                

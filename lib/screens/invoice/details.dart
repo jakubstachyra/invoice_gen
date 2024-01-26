@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invoice_gen/blocs/invoice_generation/invoice_bloc.dart';
-import 'package:invoice_gen/classes/utils.dart';
 import 'package:invoice_gen/components/buttons/my_button.dart';
 import 'package:invoice_gen/components/buttons/discard_text.dart';
 import 'package:invoice_gen/components/buttons/my_form_button.dart';

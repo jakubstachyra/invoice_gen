@@ -21,6 +21,23 @@ class CustomerScreen extends StatelessWidget {
   @override 
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: BottomAppBar(
+        height: 115,
+        color: Colors.white,
+        child:  Column(
+          children: [
+                      MyButton(text: "Continue",
+                 callback: () {
+                      BlocProvider.of<InvoiceBloc>(context).add(UpdateCustomerEvent(
+                        name: nameController.text, 
+                        address: addressController.text, 
+                        tin: tinController.text,
+                        ));
+                      BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
+                    }),
+                const SizedBox(height: 10),
+                const DiscardButton()
+          ])),
         appBar: MyAppBar(text: const Text("Customer"),
         callback:() {
                 BlocProvider.of<InvoiceBloc>(context).add(NavigateToSellerPageEvent());
@@ -70,18 +87,6 @@ class CustomerScreen extends StatelessWidget {
                 }),
                 
                 const SizedBox(height: 40,),
-          
-                MyButton(text: "Continue",
-                 callback: () {
-                      BlocProvider.of<InvoiceBloc>(context).add(UpdateCustomerEvent(
-                        name: nameController.text, 
-                        address: addressController.text, 
-                        tin: tinController.text,
-                        ));
-                      BlocProvider.of<InvoiceBloc>(context).add(NavigateToProductsPageEvent());
-                    }),
-                const SizedBox(height: 20),
-                const DiscardButton()
               ],
             )), );
   }
