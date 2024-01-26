@@ -27,13 +27,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               text: colorName,
               callback: () async {
                 var currentColor = await InvoiceColorPreferences.getDefaultInvoiceColor();
-                if (currentColor == PdfColors.blue) {
-                  context.read<InvoiceColorBloc>().add(InvoiceColorChangeEvent(PdfColors.grey));
+                if (currentColor == PdfColors.blue)  {
+                  context.read<InvoiceColorBloc>().add(const InvoiceColorChangeEvent(PdfColors.grey));
                   setState(() {
                     colorName = "Grey";
                   });
                 } else {
-                  context.read<InvoiceColorBloc>().add(InvoiceColorChangeEvent(PdfColors.blue));
+                  context.read<InvoiceColorBloc>().add(const InvoiceColorChangeEvent(PdfColors.blue));
                   setState(() {
                     colorName = "Blue";
                   });
